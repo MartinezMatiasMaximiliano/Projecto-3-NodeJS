@@ -28,9 +28,79 @@ app.use(async(req,res,next)=>{
 
 
 //---------------------[GET]------------------------
+app.get('/catalogo',async(req,res)=>{ //listo
+  try {
+    const catalogo = await catalogoView.findAll()
+    if (!catalogo) {
+      return res.status(404).json({ error: "La consulta fue exitosa, pero no se pudo encontrar el catalogo" });
+    }
+    res.status(200).json(catalogo);
+  } catch (error) {
+    console.error("Error al obtener el catalogo:", error);
+    res.status(500).json({ error: "Error al obtener el catalogo" });
+  }
+})
+
+app.get('/catalogo/id/:id',async(req,res)=>{ //listo
+  const idBuscado = req.params.id;
+  try {
+    const catalogo = await catalogoView.findByPk(idBuscado)
+    if (!catalogo) {
+      return res.status(404).json({ error: `La consulta fue exitosa, pero no se pudo encontrar el catalogo con id ${idBuscado}` });
+    }
+    res.status(200).json(catalogo);
+  } catch (error) {
+    console.error("Error al obtener el catalogo: ", error);
+    res.status(500).json({ error: `Error al obtener el catalogo con id ${idBuscado}`});
+  }  
+})
+  
+app.get('/catalogo/titulo/:titulo',async(req,res)=>{ //listo
+    const tituloBuscado = req.params.titulo;
+  try {
+    const catalogo = await catalogoView.findAll({where:{titulo:{[Op.like]:`%${tituloBuscado}%`}}})
+    if (catalogo.length == 0) {
+      return res.status(404).json({ error: `La consulta fue exitosa, pero no se pudo encontrar titulos que contengan: ${tituloBuscado}`});
+    }
+    res.status(200).json(catalogo);
+  } catch (error) {
+    console.error("Error al obtener el catalogo: ", error);
+    res.status(500).json({ error: `Error al obtener el catalogo con titulo ${tituloBuscado}`});
+  }   
+})
+
+app.get('/catalogo/generos/:genero',async(req,res)=>{ //listo
+
+    const generoBuscado = req.params.genero;
+    try {
+      const catalogo = await catalogoView.findAll({where:{genero:{[Op.like]:`%${generoBuscado}%`}}})
+      if (catalogo.length == 0) {
+        return res.status(404).json({ error: `La consulta fue exitosa, pero no se pudo encontrar titulos que contengan: ${generoBuscado} en su genero`});
+      }
+      res.status(200).json(catalogo);
+    } catch (error) {
+      console.error("Error al obtener el catalogo: ", error);
+      res.status(500).json({ error: `Error al obtener el catalogo con genero ${generoBuscado}`});
+}})
+
+app.get('/catalogo/categoria/:categoria',async(req,res)=>{ //listo
+    const catBuscada = req.params.categoria;
+    try {
+
+      const catalogo = await catalogoView.findAll({where:{categoria:{[Op.like]:`%${catBuscada}%`}}})
+      if (!catalogo) {
+        return res.status(404).json({ error: `La consulta fue exitosa, pero no se pudo encontrar titulos que sean de categoria: ${catBuscada}` });
+      }
+      res.status(200).json(catalogo);
+    } catch (error) {
+      console.error("Error al obtener el catalogo: ", error);
+      res.status(500).json({ error: `Error al obtener la categoria ${catBuscada}`});
+    }  
+})
+
 app.get('/categorias',async(req,res)=>{ //listo
     try {
-        const categorias = await Categorias.findAll()
+        const categorias = await Categorias.findAll({order:[['idCategoria','ASC']]})
         categorias.length !== 0 ? res.status(200).json(categorias)
       : res.status(404).json({ error: "No se encontraron categorias para listar." });
 
@@ -67,82 +137,13 @@ app.get('/actores/:nombre',async(req,res)=>{ //listo
   }
 })
 
-app.get('/catalogo',async(req,res)=>{ //listo
-  try {
-    const catalogo = await catalogoView.findAll()
-    if (!catalogo) {
-      return res.status(404).json({ error: "La consulta fue exitosa, pero no se pudo encontrar el catalogo" });
-    }
-    res.status(200).json(catalogo);
-  } catch (error) {
-    console.error("Error al obtener el catalogo:", error);
-    res.status(500).json({ error: "Error al obtener el catalogo" });
-  }
-})
 
-app.get('/catalogo/id/:id',async(req,res)=>{ //listo
-  const idBuscado = req.params.id;
-  try {
-    const catalogo = await catalogoView.findByPk(idBuscado)
-    if (!catalogo) {
-      return res.status(404).json({ error: `La consulta fue exitosa, pero no se pudo encontrar el catalogo con id ${idBuscado}` });
-    }
-    res.status(200).json(catalogo);
-  } catch (error) {
-    console.error("Error al obtener el catalogo: ", error);
-    res.status(500).json({ error: `Error al obtener el catalogo con id ${idBuscado}`});
-  }  
-  })
-  
-
-  app.get('/catalogo/titulo/:titulo',async(req,res)=>{ //listo
-    const tituloBuscado = req.params.titulo;
-  try {
-    const catalogo = await catalogoView.findAll({where:{titulo:{[Op.like]:`%${tituloBuscado}%`}}})
-    if (catalogo.length == 0) {
-      return res.status(404).json({ error: `La consulta fue exitosa, pero no se pudo encontrar titulos que contengan: ${tituloBuscado}`});
-    }
-    res.status(200).json(catalogo);
-  } catch (error) {
-    console.error("Error al obtener el catalogo: ", error);
-    res.status(500).json({ error: `Error al obtener el catalogo con titulo ${tituloBuscado}`});
-  }   
-  })
-
-  app.get('/catalogo/generos/:genero',async(req,res)=>{ //listo
-
-    const generoBuscado = req.params.genero;
-    try {
-      const catalogo = await catalogoView.findAll({where:{genero:{[Op.like]:`%${generoBuscado}%`}}})
-      if (catalogo.length == 0) {
-        return res.status(404).json({ error: `La consulta fue exitosa, pero no se pudo encontrar titulos que contengan: ${generoBuscado} en su genero`});
-      }
-      res.status(200).json(catalogo);
-    } catch (error) {
-      console.error("Error al obtener el catalogo: ", error);
-      res.status(500).json({ error: `Error al obtener el catalogo con genero ${generoBuscado}`});
-  }})
-
-  app.get('/catalogo/categoria/:categoria',async(req,res)=>{ //listo
-    const catBuscada = req.params.categoria;
-    try {
-
-      const catalogo = await catalogoView.findAll({where:{categoria:{[Op.like]:`%${catBuscada}%`}}})
-      if (!catalogo) {
-        return res.status(404).json({ error: `La consulta fue exitosa, pero no se pudo encontrar titulos que sean de categoria: ${catBuscada}` });
-      }
-      res.status(200).json(catalogo);
-    } catch (error) {
-      console.error("Error al obtener el catalogo: ", error);
-      res.status(500).json({ error: `Error al obtener la categoria ${catBuscada}`});
-    }  
-  })
 //---------------------[POST]-----------------------
 app.post('/categoria',async(req,res)=>{ //listo
     try {
         const {categoria} = req.body;
         const nuevaCategoria = await Categoria.create({categoria})
-        res.status(201).send('creado con exito: ',categoria) 
+        res.status(201).json({message:'creado con exito',categoria: categoria}) 
     } catch (error) {
         console.error('Error al crear el genero: ',error);
         res.status(500).json({error: 'Error al crear la categoria'});
