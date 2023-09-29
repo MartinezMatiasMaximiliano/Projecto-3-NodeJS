@@ -57,10 +57,25 @@ Esta aplicacion necesita de una base de datos local para funcionar. Para esto se
 ```
 Estos archivos contienen las opciones para importar la base de datos necesaria: El archivo `trailerflix.sql` contiene la Query para crear las tablas vacias, y el archivo `trailerflix-backup.sql` es para importar la base de datos y su contenido mediante la interfaz grafica MySQL Workbench.
 
+Crear un schema bajo el titulo de "trailerflix" e importar mediante la herramienta de importacion
+
 Una vez clonado el proyecto, creado el archivo `.env` e importada la base de datos, el servidor esta listo para su uso.
 
 ## Endpoints
 las consultas a la base de datos se hacen mediante Endpoints: 
+
+
+|URI                           |  METHOD |  DESCRIPCION                |
+|:-----------------------------|:-------:|:----------------------------|
+|/catalogo                     |GET      |buscar todo el catalogo      |
+|/catalogo/id/:id              |GET      |buscar catalogo por id       |
+|/catalogo/titulo/:titulo      |GET      |buscar catalogo por titulo   |
+|/catalogo/generos/:genero     |GET      |buscar catalogo por genero   | 
+|/catalogo/categoria/:categoria|GET      |buscar catalogo por categoria|
+|/categorias                   |GET      |buscar todas las categorias  |
+|/actores                      |GET      |buscar todos los actores     |
+|/actores/:nombre              |GET      |buscar actores por nombre    |
+|/categoria                    |POST     |insertar una nueva categoria |
 
 ### Catalogo
 #### Buscar todo el catalogo
@@ -75,19 +90,18 @@ las consultas a la base de datos se hacen mediante Endpoints:
 [
  {
       "id": 1,
-      "poster": . . .,
-      "titulo":  . . .,
-      "categoria":  . . .,
-      "genero":  . . .,
-      "resumen":  . . .,
-      "temporadas":  . . .,
-      "reparto":  . . .,
+      "poster": ". . .",
+      "titulo":  ". . .",
+      "categoria":  ". . .",
+      "genero":  ". . .",
+      "resumen":  ". . .",
+      "temporadas":  ". . .",
+      "reparto":  ". . .",
       },
 {
       "id": 2,
-      ...
+
       },
-      ...
  ]  
 ```
 
@@ -177,7 +191,7 @@ las consultas a la base de datos se hacen mediante Endpoints:
  ```json
 [
     {
-        "categoria":nombre de categoria 
+        "categoria":"nombre de categoria" 
     }
 ]
  ```
@@ -189,8 +203,8 @@ las consultas a la base de datos se hacen mediante Endpoints:
  ```json
 [
     {
-        "message":'creado con exito',
-        "categoria":nombre de categoria 
+        "message":"creado con exito",
+        "categoria":"nombre de categoria" 
     }
 ]
  ```
@@ -220,7 +234,7 @@ las consultas a la base de datos se hacen mediante Endpoints:
   {
     "idPersona": 4,
     "nombre": "Tobias Menzies"
-  },...
+  },
 ]
  ```
 
@@ -253,3 +267,6 @@ las consultas a la base de datos se hacen mediante Endpoints:
 ]
  ```
 ## Sobre la base de datos
+La base de datos de Trailerflix es una base de datos relacional con la siguiente estructura:
+ ![ER](/MySQL/db1.png)
+
