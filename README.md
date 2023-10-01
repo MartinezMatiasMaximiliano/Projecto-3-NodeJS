@@ -57,6 +57,8 @@ Esta aplicacion necesita de una base de datos local para funcionar. Para esto se
 ```
 Estos archivos contienen las opciones para importar la base de datos necesaria: El archivo `trailerflix.sql` contiene la Query para crear las tablas vacias, y el archivo `trailerflix-backup.sql` es para importar la base de datos y su contenido mediante la interfaz grafica MySQL Workbench.
 
+En caso de que las vistas no se creen al importar el backup, el SQL requerido para crearla se encuentra en `SQLcatalogoView.sql`, esta vista es necesaria para buscar el catalogo
+
 Crear un schema bajo el titulo de "trailerflix" e importar mediante la herramienta de importacion
 
 Una vez clonado el proyecto, creado el archivo `.env` e importada la base de datos, el servidor esta listo para su uso.
